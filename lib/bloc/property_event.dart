@@ -2,12 +2,12 @@ part of 'property_bloc.dart';
 
 sealed class PropertyEvent extends Equatable {
   const PropertyEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
-class LoadProperties extends PropertyEvent {}
+class LoadPropertiesEvent extends PropertyEvent {
+  @override
+  List<Object?> get props => [];
+}
 
 class AddProperty extends PropertyEvent {
   final Property property;

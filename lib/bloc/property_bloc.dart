@@ -1,15 +1,23 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:sleekdxb/models/property_model.dart';
+import 'package:sleekdxb/services/property.dart';
 
 part 'property_event.dart';
 part 'property_state.dart';
 
 class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
-  PropertyBloc() : super(PropertyInitial()) {
-    on<LoadProperties>((event, emit) async {
-      await Future<void>.delayed(const Duration(seconds: 1));
-      emit(const PropertyLoaded(property: <Property>[]));
+  final PropertyService _propertyService;
+
+  PropertyBloc(this._propertyService) : super(PropertyLoading()) {
+    on<LoadPropertiesEvent>((event, emit) async {
+      emit(PropertyLoading());
+      try {
+        final properties = await _propertyService.fetchPropertyList();
+        emit(PropertyLoaded(property: properties));
+      } catch (e) {
+        emit(PropertyErrorState(e.toString()));
+      }
     });
     on<AddProperty>((event, emit) {
       if (state is PropertyLoaded) {

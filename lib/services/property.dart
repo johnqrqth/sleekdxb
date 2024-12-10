@@ -1,18 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:sleekdxb/models/property_model.dart';
 import 'package:http/http.dart' as http;
 
 class PropertyService {
+  String apiUrl = "http://localhost:8000/api";
   //
   //returns a list of properties
   //
 
   Future<List<Property>> fetchPropertyList() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://localhost:444/properties'));
+      final response = await http.get(Uri.parse('$apiUrl/properties'));
 
       final data = json.decode(response.body);
       return Property.listFromJson(data);
@@ -27,8 +26,8 @@ class PropertyService {
 
   Future<Property> addProperty(Property property) async {
     try {
-      final response = await http
-          .post(Uri.parse('http://localhost:444/property'), body: property);
+      final response =
+          await http.post(Uri.parse('$apiUrl/property'), body: property);
 
       final data = json.decode(response.body);
       return Property.fromJson(data);
@@ -43,8 +42,7 @@ class PropertyService {
 
   Future<Property> deleteProperty(id) async {
     try {
-      final response =
-          await http.delete(Uri.parse('http://localhost:444/properties/$id'));
+      final response = await http.delete(Uri.parse('$apiUrl/property/$id'));
 
       final data = json.decode(response.body);
       return Property.fromJson(data);
